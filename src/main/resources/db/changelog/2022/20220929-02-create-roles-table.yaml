@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20220929-02
+      author: ferhad
+      changes:
+        - createTable:
+            tableName: roles
+            schemaName: public
+            columns:
+              - column:
+                  autoIncrement: true
+                  name: id
+                  type: int
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: role_pkey
+              - column:
+                  name: name
+                  type: varchar(50)
+      rollback:
+        - dropTable:
+            tableName: roles

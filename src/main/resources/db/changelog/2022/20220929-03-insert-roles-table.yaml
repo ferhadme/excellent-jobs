@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20220929-02
+      author: ferhad
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: 'ADMIN'
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: 'RECRUITER'
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: 'CANDIDATE'

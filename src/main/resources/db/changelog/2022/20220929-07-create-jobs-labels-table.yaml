@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20220929-07
+      author: ferhad
+      changes:
+        - createTable:
+            tableName: jobs_labels
+            schemaName: public
+            columns:
+              - column:
+                  autoIncrement: true
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: jobs_labels_pkey
+              - column:
+                  name: jobs_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_jobs_labels_jobs"
+                    references: "jobs(id)"
+              - column:
+                  name: label_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_jobs_labels_labels"
+                    references: "labels(id)"
+              - column:
+                  name: created_at
+                  type: timestamp
+      rollback:
+        - dropTable:
+            tableName: jobs_labels

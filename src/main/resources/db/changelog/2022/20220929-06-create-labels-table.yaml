@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20220929-06
+      author: ferhad
+      changes:
+        - createTable:
+            tableName: labels
+            schemaName: public
+            columns:
+              - column:
+                  autoIncrement: true
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: label_pkey
+              - column:
+                  name: name
+                  type: varchar(50)
+              - column:
+                  name: description
+                  type: varchar(500)
+              - column:
+                  name: created_at
+                  type: timestamp
+      rollback:
+        - dropTable:
+            tableName: labels

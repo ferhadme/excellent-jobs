@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20220929-04
+      author: ferhad
+      changes:
+        - createTable:
+            tableName: users
+            schemaName: public
+            columns:
+              - column:
+                  autoIncrement: true
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: user_pkey
+              - column:
+                  name: first_name
+                  type: varchar(50)
+              - column:
+                  name: last_name
+                  type: varchar(50)
+              - column:
+                  name: email
+                  type: varchar(50)
+              - column:
+                  name: password
+                  type: varchar(100)
+              - column:
+                  name: company_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: "fk_users_companies"
+                    references: "companies(id)"
+              - column:
+                  name: role_id
+                  type: int
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_users_roles"
+                    references: "roles(id)"
+              - column:
+                  name: created_at
+                  type: timestamp
+      rollback:
+        - dropTable:
+            tableName: users

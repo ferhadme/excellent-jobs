@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20220929-05
+      author: ferhad
+      changes:
+        - createTable:
+            tableName: jobs
+            schemaName: public
+            columns:
+              - column:
+                  autoIncrement: true
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: job_pkey
+              - column:
+                  name: title
+                  type: varchar(50)
+              - column:
+                  name: description
+                  type: varchar(500)
+              - column:
+                  name: recruiter_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: "fk_jobs_users"
+                    references: "users(id)"
+              - column:
+                  name: created_at
+                  type: timestamp
+      rollback:
+        - dropTable:
+            tableName: jobs
