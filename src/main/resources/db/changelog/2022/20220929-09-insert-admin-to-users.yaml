@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20220929-09
+      author: ferhad
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: first_name
+                  value: 'Ferhad'
+              - column:
+                  name: last_name
+                  value: 'Mehdizade'
+              - column:
+                  name: email
+                  value: 'frhdmehdiyev@gmail.com'
+              - column:
+                  name: password
+                  value: '$2a$10$WYW.l8T/ots6gpGmNyrwCOxUi3.ikwB/fGGLcPR1NQjDAQZflBXaO'
+              - column:
+                  name: role_id
+                  value: 1
+              - column:
+                  name: created_at
+                  value: now()

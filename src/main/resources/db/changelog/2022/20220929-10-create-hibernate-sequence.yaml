@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20220929-10
+      author: ferhad
+      changes:
+        createSequence:
+          schemaName: public
+          sequenceName: hibernate_sequence
+          startValue: 2
+          incrementBy: 1
