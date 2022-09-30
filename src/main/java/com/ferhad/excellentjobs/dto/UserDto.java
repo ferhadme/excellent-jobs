@@ -1,10 +1,9 @@
-package com.ferhad.excellentjobs.dto.payload;
+package com.ferhad.excellentjobs.dto;
 
-import com.ferhad.excellentjobs.dto.CompanyResponseDto;
 import lombok.Data;
 
 @Data
-public class RegisterResponseDto {
+public class UserDto {
     private Long id;
     private String firstName;
     private String lastName;

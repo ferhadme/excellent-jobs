@@ -1,10 +1,10 @@
 package com.ferhad.excellentjobs.resource;
 
+import com.ferhad.excellentjobs.dto.UserDto;
 import com.ferhad.excellentjobs.dto.payload.CandidateRegisterRequestDto;
 import com.ferhad.excellentjobs.dto.payload.LoginRequestDto;
 import com.ferhad.excellentjobs.dto.payload.LoginResponseDto;
 import com.ferhad.excellentjobs.dto.payload.RecruiterRegisterRequestDto;
-import com.ferhad.excellentjobs.dto.payload.RegisterResponseDto;
 import com.ferhad.excellentjobs.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ public class AuthResource {
     private final AuthService authService;
 
     @PostMapping("/recruiter/register")
-    public ResponseEntity<RegisterResponseDto> registerAsRecruiter(
+    public ResponseEntity<UserDto> registerAsRecruiter(
             @RequestBody RecruiterRegisterRequestDto registerRequest
     ) {
         return ResponseEntity.ok(
@@ -31,7 +31,7 @@ public class AuthResource {
     }
 
     @PostMapping("/candidate/register")
-    public ResponseEntity<RegisterResponseDto> registerAsCandidate(
+    public ResponseEntity<UserDto> registerAsCandidate(
             @RequestBody CandidateRegisterRequestDto registerRequest
     ) {
         return ResponseEntity.ok(

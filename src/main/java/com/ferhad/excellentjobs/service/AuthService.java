@@ -1,16 +1,16 @@
 package com.ferhad.excellentjobs.service;
 
+import com.ferhad.excellentjobs.dto.UserDto;
 import com.ferhad.excellentjobs.dto.payload.CandidateRegisterRequestDto;
 import com.ferhad.excellentjobs.dto.payload.LoginRequestDto;
 import com.ferhad.excellentjobs.dto.payload.LoginResponseDto;
 import com.ferhad.excellentjobs.dto.payload.RecruiterRegisterRequestDto;
-import com.ferhad.excellentjobs.dto.payload.RegisterResponseDto;
 import com.ferhad.excellentjobs.exceptions.DuplicateEmailException;
 import com.ferhad.excellentjobs.exceptions.NotFoundException;
 import com.ferhad.excellentjobs.mapper.AuthMapper;
 import com.ferhad.excellentjobs.mapper.CompanyMapper;
+import com.ferhad.excellentjobs.mapper.UserMapper;
 import com.ferhad.excellentjobs.model.Company;
-import com.ferhad.excellentjobs.model.Label;
 import com.ferhad.excellentjobs.model.Role;
 import com.ferhad.excellentjobs.model.User;
 import com.ferhad.excellentjobs.model.enums.ERole;
@@ -30,22 +30,18 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final UserMapper userMapper;
     private final AuthMapper authMapper;
     private final CompanyMapper companyMapper;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final LabelRepository labelRepository;
+    private final LabelService labelService;
     private final CompanyRepository companyRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthValidator authValidator;
@@ -64,7 +60,7 @@ public class AuthService {
                 .build();
     }
 
-    public RegisterResponseDto registerAsCandidate(CandidateRegisterRequestDto candidateRegister) {
+    public UserDto registerAsCandidate(CandidateRegisterRequestDto candidateRegister) {
         authValidator.validateCandidateRegistration(candidateRegister);
         if (userRepository.existsByEmail(candidateRegister.getEmail())) {
             throw new DuplicateEmailException("Email " + candidateRegister.getEmail() + " is already token");
@@ -75,14 +71,14 @@ public class AuthService {
                 .orElseThrow(() -> new NotFoundException("CANDIDATE Role not found"));
         user.setRole(role);
         user.setPassword(passwordEncoder.encode(candidateRegister.getPassword()));
-        user.setLabels(initializeLabels(candidateRegister.getLabels()));
+        user.setLabels(labelService.initializeLabels(candidateRegister.getLabels()));
         user.setCreatedAt(LocalDateTime.now(ZoneOffset.UTC));
-        return authMapper.convert(
+        return userMapper.convert(
                 userRepository.save(user), null
         );
     }
 
-    public RegisterResponseDto registerAsRecruiter(RecruiterRegisterRequestDto recruiterRegister) {
+    public UserDto registerAsRecruiter(RecruiterRegisterRequestDto recruiterRegister) {
         authValidator.validateRecruiterRegistration(recruiterRegister);
         if (userRepository.existsByEmail(recruiterRegister.getEmail())) {
             throw new DuplicateEmailException("Email " + recruiterRegister.getEmail() + " is already token");
@@ -96,26 +92,10 @@ public class AuthService {
         Company company = companyRepository.findByHash(recruiterRegister.getCompanyHash())
                         .orElseThrow(() -> new NotFoundException("Company not found"));
         user.setCompany(company);
-        user.setLabels(initializeLabels(recruiterRegister.getLabels()));
         user.setCreatedAt(LocalDateTime.now(ZoneOffset.UTC));
-        return authMapper.convert(
+        return userMapper.convert(
                 userRepository.save(user), companyMapper.convert(company)
         );
     }
 
-    private Set<Label> initializeLabels(List<String> labels) {
-        Map<String, Label> labelMap = labelRepository.findAll().stream()
-                .collect(Collectors.toMap(Label::getName, Function.identity()));
-
-        return labels.stream()
-                .map(e -> {
-                    if (labelMap.containsKey(e)) {
-                        return labelMap.get(e);
-                    }
-                    Label label = new Label();
-                    label.setName(e);
-                    return label;
-                })
-                .collect(Collectors.toSet());
-    }
 }

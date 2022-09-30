@@ -12,5 +12,4 @@ public class RecruiterRegisterRequestDto {
     private String password;
     private String confirmPassword;
     private String companyHash;
-    private List<String> labels;
 }

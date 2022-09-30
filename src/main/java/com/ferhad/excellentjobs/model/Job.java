@@ -40,7 +40,7 @@ public class Job {
     @JoinTable(
             name = "jobs_labels",
             joinColumns = {
-                    @JoinColumn(name = "job_id")
+                    @JoinColumn(name = "jobs_id")
             },
             inverseJoinColumns = {
                     @JoinColumn(name = "label_id")
